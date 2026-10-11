@@ -1,10 +1,10 @@
 ---
 name: ig-plan
 description: >-
-  Build the week on Instagram - what to post, which format, when, and who to
-  engage with. Use when the user says "plan my week", "what should I post",
-  "content calendar", "I have nothing to post about", or wants a posting
-  schedule and an engagement list.
+  Plan the user's Instagram week: which posts, which format, when, and the ten
+  accounts to engage with. Use when the user asks to plan their Instagram
+  week, build an Instagram content calendar or posting schedule, or has
+  nothing to post on Instagram.
 ---
 
 # ig-plan
@@ -45,7 +45,7 @@ Mix across the week, never two of the same type back to back:
 | **Offer** | 1 per fortnight | what you sell, said plainly, no apology. Carousel or stories. |
 
 For each slot give: the theme, the specific angle from what actually happened
-this week, the format, and the hook formula number from `ig-reel/hooks.json`.
+this week, the format, and the hook formula number from `${CLAUDE_SKILL_DIR}/../ig-reel/hooks.json`.
 Not a topic, an angle. "AI" is not a plan. "The proposal we lost because the
 draft had an em dash in it" is a Reel.
 

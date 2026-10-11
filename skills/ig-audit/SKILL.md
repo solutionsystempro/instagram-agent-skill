@@ -1,11 +1,11 @@
 ---
 name: ig-audit
 description: >-
-  Post-mortem on what the user has already posted - which reels actually
-  worked, why, and what to stop making. Use when the user pastes their
-  Instagram insights or past posts and asks "what's working", "why did this
-  flop", "read my analytics", "audit my content", or wants to know what to do
-  more of.
+  Post-mortem on what the user has already posted on Instagram: which reels
+  worked, why, and what to stop making, ranked by outlier multiple and sends
+  per reach. Use when the user shares Instagram Insights, a Meta Business
+  Suite export or past Instagram posts and asks what is working, why a reel
+  flopped, or to audit their Instagram content.
 ---
 
 # ig-audit
@@ -23,6 +23,12 @@ Ask for whichever the user has:
 - Or the retention graph for their best and worst recent reels. This one
   screenshot is worth more than the rest combined.
 - Or just the posts and their view counts, which is enough for a first pass.
+
+Official sources first: Instagram's own Insights screens, a Meta Business Suite
+export, or the Instagram Graph API insights endpoints if the user already has a
+Professional account and their own token. Never ask for their password or
+token, and do not scrape their profile with a browser tool. If they want the
+browser used, they drive it.
 
 Also read `~/.claude/instagram/log.md` if it exists, since it records which
 hook formula each post used.
@@ -52,7 +58,7 @@ and be willing to conclude something the user will not like:
 
 - **Hold at 3 seconds.** If the top and bottom differ here, it is the hook and
   nothing else, and everything downstream is a distraction.
-- **Hook formula.** Which ids from `ig-reel/hooks.json` are in the top five?
+- **Hook formula.** Which ids from `${CLAUDE_SKILL_DIR}/../ig-reel/hooks.json` are in the top five?
 - **Format.** Reel, carousel, single image.
 - **Length.** Group into under 15s, 15 to 30s, 30 to 60s, over 60s.
 - **Theme.**

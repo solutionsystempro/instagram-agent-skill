@@ -1,11 +1,11 @@
 ---
 name: ig-caption
 description: >-
-  Write the Instagram caption - the line that survives the "... more" cut, the
-  body, the single ask, the search terms and the three hashtags - and lint it
-  before it goes out. Use when the user says "write the caption", "caption this",
-  "what do I put in the description", has a reel or a carousel ready and needs
-  the text, or asks about hashtags.
+  Write and lint an Instagram caption: the line that survives the "... more"
+  cut, the body, one ask, search terms and up to five hashtags, checked by
+  caption.py. Use when the user wants a caption for an Instagram Reel,
+  carousel or post, or asks about Instagram hashtags or caption length. Not
+  for YouTube descriptions or other platforms.
 ---
 
 # ig-caption
@@ -13,9 +13,12 @@ description: >-
 One tool lives in this folder and it runs:
 
 ```bash
-python3 caption.py caption.txt
-python3 caption.py caption.txt --keywords "client proposals,agency pricing"
+python "${CLAUDE_SKILL_DIR}/caption.py" caption.txt
+python "${CLAUDE_SKILL_DIR}/caption.py" caption.txt --keywords "client proposals,agency pricing"
 ```
+
+`${CLAUDE_SKILL_DIR}` is this skill's folder, so the command works from any
+directory. On macOS or Linux, use `python3` if `python` is not found.
 
 It prints the caption the way the feed prints it: the first 125 characters in a
 box, everything else behind the tap. Read that box before you read anything
@@ -78,7 +81,7 @@ that reads normally. "Client proposals" as words in line three, not
 Ask for two or three of those terms, then pass them to the linter:
 
 ```bash
-python3 caption.py draft.txt --keywords "client proposals,agency pricing"
+python "${CLAUDE_SKILL_DIR}/caption.py" draft.txt --keywords "client proposals,agency pricing"
 ```
 
 ## Rules

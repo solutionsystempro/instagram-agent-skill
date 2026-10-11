@@ -1,10 +1,10 @@
 ---
 name: ig-carousel
 description: >-
-  Build an Instagram carousel - the cover that earns the swipe, slide-by-slide
-  copy, and the 1080x1350 files to upload. Use when the user says "carousel",
-  "slides", "swipe post", "turn this into a carousel", or has a list-shaped or
-  step-shaped idea that would die as a single image.
+  Build an Instagram carousel post: the cover that earns the swipe, slide-by-
+  slide copy, and 1080x1350 slide files. Use when the user asks for an
+  Instagram carousel or swipe post, or wants to turn an idea into Instagram
+  carousel slides. Not for presentation decks.
 ---
 
 # ig-carousel

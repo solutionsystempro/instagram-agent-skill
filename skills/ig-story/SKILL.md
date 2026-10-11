@@ -1,11 +1,10 @@
 ---
 name: ig-story
 description: >-
-  Write the day's Instagram Stories - the frame-by-frame sequence, which
-  stickers to use where, and the one that moves people into the DMs. Use when
-  the user says "stories", "what do I post on my story", "story sequence",
-  "poll idea", "I have nothing to story about", or wants to sell something
-  without making a post about it.
+  Write the day's Instagram Stories: the frame-by-frame sequence, which
+  sticker goes where, and the poll or question box that starts DMs. Use when
+  the user asks for an Instagram Story sequence, Instagram Story sticker or
+  poll ideas, or wants to sell on Instagram Stories without a feed post.
 ---
 
 # ig-story

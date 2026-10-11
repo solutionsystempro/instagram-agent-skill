@@ -1,10 +1,11 @@
 ---
 name: ig-reply
 description: >-
-  Handle the comments under the user's own reels and posts - draft replies to
-  the ones worth answering, sorted by which ones are. Use when the user pastes
-  their comments, says "reply to these", "handle my comments", "someone said X
-  on my reel", or is dealing with a critic, a hater or a lead in the comments.
+  Triage and draft replies to the comments under the user's own Instagram
+  posts and reels: keyword, lead, substance, question, support, noise. Use
+  when the user pastes comments from their Instagram post or asks how to
+  answer a critic, hater or lead in their Instagram comments. Drafts only.
+  Nothing is posted without the user's approval.
 ---
 
 # ig-reply
@@ -64,11 +65,12 @@ every QUESTION that qualifies and hand it to `/ig-reel` as formula #16.
 ## Keyword comments
 
 If the post used a keyword ask, those comments are the whole point of the post.
-Every one of them is a person who raised their hand. Reply to each, then send
-what was promised. If the user has automation set up through Instagram's own
-tools or an approved partner, say so and let it run; if not, the replies are
-manual and that is fine at this volume. Never bulk-DM people who did not
-comment.
+Every one of them is a person who raised their hand. Draft a reply to each and
+the message that delivers what was promised. If the user has keyword automation
+set up through Instagram's own tools or an approved partner, that is their
+configuration and it can run; if not, the user sends the replies by hand, and
+that is fine at this volume. This skill never posts a reply or sends a DM
+itself, by browser or by API. Never bulk-DM people who did not comment.
 
 ## Output
 

@@ -1,12 +1,11 @@
 ---
 name: ig-human
 description: >-
-  Strip the machine fingerprint out of any draft - em dashes, AI slop words,
-  invisible watermark characters - and score it against a five-check detection
-  panel before it goes out. Use whenever text needs to sound human, when the
-  user says humanize, "does this sound like AI", "remove the em dashes",
-  "de-slop this", "this sounds like ChatGPT", or before any caption, script,
-  comment, reply or DM is shown to the user.
+  Humanize an Instagram caption, Reel script, comment, reply or DM: strip em
+  dashes, AI slop words and invisible characters with humanize.py, then score
+  it with detect.py. Use when the user asks to humanize or de-slop Instagram
+  copy, asks if an Instagram draft sounds like AI, or when another ig-* skill
+  hands over a draft.
 ---
 
 # ig-human
@@ -15,10 +14,13 @@ Two tools live in this folder and they both actually run. Use them. Do not
 eyeball this.
 
 ```bash
-python3 humanize.py draft.txt --report        # clean it, show what changed
-python3 detect.py draft.txt                    # score it, five checks
-python3 detect.py before.txt after.txt         # prove the delta
+python "${CLAUDE_SKILL_DIR}/humanize.py" draft.txt --report        # clean it, show what changed
+python "${CLAUDE_SKILL_DIR}/detect.py" draft.txt                    # score it, five checks
+python "${CLAUDE_SKILL_DIR}/detect.py" before.txt after.txt         # prove the delta
 ```
+
+`${CLAUDE_SKILL_DIR}` is this skill's folder, so the command works from any
+directory. On macOS or Linux, use `python3` if `python` is not found.
 
 Both read `slop.json`: 154 stock words and phrases with plain-English
 replacements, 18 invisible character classes, 11 typographic substitutions and
@@ -102,9 +104,9 @@ do not tell a user their text is undetectable.
 
 ## Order of operations
 
-1. `humanize.py draft.txt -o clean.txt --report`
+1. `python "${CLAUDE_SKILL_DIR}/humanize.py" draft.txt -o clean.txt --report`
 2. Read the structural flags. Rewrite those lines yourself.
-3. `detect.py draft.txt clean.txt` to show the before and after.
+3. `python "${CLAUDE_SKILL_DIR}/detect.py" draft.txt clean.txt` to show the before and after.
 4. If the verdict is not PASS, fix the weakest check named in the output and go
    again. Two rounds is normal. Five means the draft was written by formula,
    and the fix is a different draft, not more passes.

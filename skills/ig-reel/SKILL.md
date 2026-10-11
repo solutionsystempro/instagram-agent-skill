@@ -1,12 +1,11 @@
 ---
 name: ig-reel
 description: >-
-  Write an Instagram Reel from a raw idea - hook options off 26 formulas, the
-  spoken script, the on-screen text, and a timed beat sheet - in the user's own
-  voice and scored before they shoot it. Use whenever the user wants a Reel, a
-  short-form video script, a hook, a voiceover, "make a reel about X", "what
-  should I say in this video", or is about to record and does not have the
-  first line yet.
+  Write an Instagram Reel from a raw idea: hook options from 26 formulas
+  scored by hookscore.py, the spoken script, on-screen text, and a timed beat
+  sheet from beats.py, in the user's own voice. Use when the user wants an
+  Instagram Reel, a Reel script or a Reel hook, or is about to record a Reel
+  without a first line.
 ---
 
 # ig-reel
@@ -17,10 +16,13 @@ Two tools live in this folder and they both actually run. Use them. Do not
 eyeball the hook and do not guess at the length.
 
 ```bash
-python3 hookscore.py hooks.txt              # rank your hook options
-python3 hookscore.py --hook "one line"      # score a single one
-python3 beats.py script.txt --target 30     # timed beat sheet before you shoot
+python "${CLAUDE_SKILL_DIR}/hookscore.py" hooks.txt              # rank your hook options
+python "${CLAUDE_SKILL_DIR}/hookscore.py" --hook "one line"      # score a single one
+python "${CLAUDE_SKILL_DIR}/beats.py" script.txt --target 30     # timed beat sheet before you shoot
 ```
+
+`${CLAUDE_SKILL_DIR}` is this skill's folder, so the command works from any
+directory. On macOS or Linux, use `python3` if `python` is not found.
 
 ## Before you write
 
@@ -29,7 +31,7 @@ python3 beats.py script.txt --target 30     # timed beat sheet before you shoot
    to. If it does not exist, ask for **three of their own reels**, transcribe or
    read them, infer the voice, and write the file. A script in the wrong voice
    is unusable, because they have to say it out loud.
-2. Read `hooks.json` in this folder. 26 formulas, each with a template, a filled
+2. Read `${CLAUDE_SKILL_DIR}/hooks.json`. 26 formulas, each with a template, a filled
    example, the on-screen version, what it is for, and how it gets ruined.
    Four of them are in there because they kept turning up in real hooks, not
    because they completed a pattern.
@@ -71,7 +73,7 @@ not have the hook yet and no amount of editing fixes that.
 user actually talks. Contractions. Short lines. No sentence they would have to
 rehearse.
 
-**4. Time it.** Run `beats.py script.txt --target {length}`. Fix every flag:
+**4. Time it.** Run `python "${CLAUDE_SKILL_DIR}/beats.py" script.txt --target {length}`. Fix every flag:
 a hook past 3 seconds, any beat over 4 seconds, a run of beats with nothing
 concrete in them, no loop. Re-run until it is clean.
 

@@ -2,10 +2,9 @@
 name: ig-profile
 description: >-
   Score an Instagram profile out of 100 against a 12-part rubric and rewrite
-  the parts that lose points - name field, bio, link, highlights, pinned three,
-  grid. Use when the user says "optimize my profile", "fix my bio", "score my
-  Instagram", "why don't people follow me", or pastes their profile and asks how
-  it reads.
+  what loses points: name field, bio, link, highlights, pinned posts, grid.
+  Use when the user wants to optimize their Instagram profile or bio, score
+  their Instagram, or asks why Instagram visitors do not follow.
 ---
 
 # ig-profile
@@ -26,7 +25,7 @@ Do not log into Instagram on their behalf.
 
 ## Score it
 
-Read `rubric.json` in this folder. Twelve items, 100 points, each with what
+Read `${CLAUDE_SKILL_DIR}/rubric.json`. Twelve items, 100 points, each with what
 full marks looks like and how it usually fails. Score every item, show the
 table, give the total. Be honest. Most profiles land in the 30s and 40s on the
 first pass and a generous score is useless.

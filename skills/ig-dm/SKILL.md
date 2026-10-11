@@ -1,11 +1,10 @@
 ---
 name: ig-dm
 description: >-
-  Write Instagram DMs that get replies - the keyword delivery, the first
-  message to someone who engaged, the collab pitch, and the two follow-ups. Use
-  when the user says "DM this person", "what do I send them", "outreach
-  message", "how do I follow up", "pitch this brand", or is reaching out to
-  someone specific.
+  Draft Instagram DMs: the keyword delivery, the first message to someone who
+  engaged, a collab pitch, and two follow-ups. Use when the user needs to
+  write an Instagram direct message to a specific person or brand. Drafts
+  only. The user sends each one. Not for email or LinkedIn outreach.
 ---
 
 # ig-dm
@@ -104,6 +103,8 @@ Then stop. A third converts nobody and costs the relationship.
 
 ## Never
 
+- Never send a DM yourself, by browser, computer-use or API. Draft it. The user
+  reads it and sends it.
 - Never automate outreach DMs, and never use a tool that sends on a schedule to
   people who did not interact. It violates Instagram's Terms of Use and
   restricts the account.

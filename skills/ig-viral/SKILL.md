@@ -1,13 +1,11 @@
 ---
 name: ig-viral
 description: >-
-  Go and find the reels that are actually working right now in the user's
-  niche, rank them by how far each beat its own account, name the hook formula
-  each one used, and turn that into a swipe file they can shoot from. Use when
-  the user says "find viral videos", "what's working right now", "what are
-  people posting in my niche", "reverse engineer this account", "build me a
-  swipe file", "why is this reel doing numbers", or asks what to make next and
-  has no evidence to answer with.
+  Research what is working on Instagram in the user's niche: rank reels by how
+  far each beat its own account's median, name the hook formula, and write a
+  swipe file with swipe.py. Use when the user asks what Instagram Reels are
+  working in their niche, wants to reverse engineer an Instagram account, or
+  wants an Instagram swipe file. Reads only, at human speed.
 ---
 
 # ig-viral
@@ -18,8 +16,11 @@ looks. Run it monthly, not daily. Formulas last a season.
 One tool lives in this folder and it runs:
 
 ```bash
-python3 swipe.py captured.tsv --out ~/.claude/instagram/swipe.md
+python "${CLAUDE_SKILL_DIR}/swipe.py" captured.tsv --out ~/.claude/instagram/swipe.md
 ```
+
+`${CLAUDE_SKILL_DIR}` is this skill's folder, so the command works from any
+directory. On macOS or Linux, use `python3` if `python` is not found.
 
 ## The one idea that makes this worth doing
 
@@ -50,16 +51,25 @@ most relevant corpus that exists and it is already filtered by their taste.
 
 ## Step 2: go and look
 
-Use whatever browsing tool this session actually has: an in-app browser, a
-browser extension connected to the user's own Chrome, or a computer-use tool.
-There is no API for this and there does not need to be, because the volume is
-small enough to read.
+Use the most official source available, in this order:
+
+1. **What the user pastes.** Handles, view counts and first lines they copy
+   while scrolling, or screenshots. This is the default and needs nothing.
+2. **The Instagram Graph API**, if the user already has a Professional account
+   and a Meta developer app. Its Business Discovery endpoint returns public
+   profile and media data for other Business and Creator accounts. Which fields
+   it returns changes between API versions, so check Meta's current docs
+   rather than assuming view counts are there.
+3. **A browser, last.** Only if the user asks for it, with the user present,
+   in their own logged-in browser. Read the screen. Do not click follow, like,
+   comment or message.
 
 **Rules that are not negotiable:**
 
 - **Never log into Instagram on the user's behalf and never ask for a
-  password.** If a page needs a login, the user is the one who is already
-  logged in. Drive their browser with them present, or ask them to paste.
+  password or a token.** If a page needs a login, the user is the one who is
+  already logged in. Drive their browser with them present, or ask them to
+  paste.
 - **This is reading, not scraping.** Ten accounts, a dozen reels each, at human
   speed. Automated collection at volume violates Instagram's Terms of Use and
   gets accounts action-blocked. Do not build a crawler, do not use a scraping
@@ -85,22 +95,16 @@ Median is the important one. Without it you are back to ranking by follower
 count, which is the thing this skill exists to stop.
 
 **When Instagram will not show you enough:** the same hook grammar runs on
-YouTube Shorts, where view counts and transcripts are public and no login is
-involved. It is a legitimate second corpus, and the spoken hook is easier to
-get:
+YouTube Shorts, where view counts are public and no login is involved. It is a
+legitimate second corpus. Get view counts from the official YouTube Data API
+(`videos.list` with `part=statistics`, which needs a free API key the user
+creates), or have the user read them off the channel page. For the hook, open
+the Short's transcript on YouTube and take every word with a timestamp under
+3.0 seconds. That is the hook, as said, not as written.
 
-```bash
-# view counts for a channel's shorts
-python3 -m yt_dlp --flat-playlist --playlist-end 40 -J \
-  "https://www.youtube.com/@HANDLE/shorts" > channel.json
-
-# the spoken first line of one short, from its auto-captions
-python3 -m yt_dlp --skip-download --write-auto-subs --sub-langs "en.*" \
-  --sub-format json3 -o hook "https://www.youtube.com/watch?v=VIDEO_ID"
-```
-
-Take every caption word with a timestamp under 3.0 seconds. That is the hook,
-as said, not as written.
+Do not use a downloader such as yt-dlp for this unless the user decides to.
+YouTube's Terms of Service restrict automated access and downloading outside
+the official API, and the call is theirs to make, not this skill's.
 
 ## Step 3: rank it
 
@@ -112,7 +116,7 @@ account	followers	median	views	hook
 ```
 
 ```bash
-python3 swipe.py captured.tsv --out ~/.claude/instagram/swipe.md
+python "${CLAUDE_SKILL_DIR}/swipe.py" captured.tsv --out ~/.claude/instagram/swipe.md
 ```
 
 It computes the outlier multiple, names the hook formula using the same 26

@@ -1,10 +1,11 @@
 ---
 name: ig-comment
 description: >-
-  Write comments on other people's Instagram posts and reels that read as a
-  person with an opinion, not a bot. Use when the user pastes a post or a reel
-  and wants a comment, says "comment on this", "engage with this", "what do I
-  say here", or wants a batch for their daily engagement round.
+  Draft comments for the user to post on other people's Instagram posts and
+  reels, picked from nine comment types so they read as a person with an
+  opinion. Use when the user pastes an Instagram post or reel and wants a
+  comment, or wants a batch for their daily Instagram engagement round. Drafts
+  only. The user posts every comment by hand.
 ---
 
 # ig-comment
