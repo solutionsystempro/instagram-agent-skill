@@ -6,6 +6,10 @@ description: >-
   swipe file with swipe.py. Use when the user asks what Instagram Reels are
   working in their niche, wants to reverse engineer an Instagram account, or
   wants an Instagram swipe file. Reads only, at human speed.
+license: MIT
+metadata:
+  maintainer: Ian Ryan Kirk
+  original-author: Jake Schincariol
 ---
 
 # ig-viral

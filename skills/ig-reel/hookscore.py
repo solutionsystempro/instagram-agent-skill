@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Original (c) 2026 Jake Schincariol. Modifications (c) 2026 Ian Ryan Kirk. MIT License.
 """
 hookscore.py - score the first line of a Reel on the five things strong hooks
 have in common, and rank a batch of them against each other.

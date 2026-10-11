@@ -6,6 +6,10 @@ description: >-
   caption.py. Use when the user wants a caption for an Instagram Reel,
   carousel or post, or asks about Instagram hashtags or caption length. Not
   for YouTube descriptions or other platforms.
+license: MIT
+metadata:
+  maintainer: Ian Ryan Kirk
+  original-author: Jake Schincariol
 ---
 
 # ig-caption

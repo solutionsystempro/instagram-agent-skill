@@ -6,6 +6,10 @@ description: >-
   per reach. Use when the user shares Instagram Insights, a Meta Business
   Suite export or past Instagram posts and asks what is working, why a reel
   flopped, or to audit their Instagram content.
+license: MIT
+metadata:
+  maintainer: Ian Ryan Kirk
+  original-author: Jake Schincariol
 ---
 
 # ig-audit

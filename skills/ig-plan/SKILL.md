@@ -5,6 +5,10 @@ description: >-
   accounts to engage with. Use when the user asks to plan their Instagram
   week, build an Instagram content calendar or posting schedule, or has
   nothing to post on Instagram.
+license: MIT
+metadata:
+  maintainer: Ian Ryan Kirk
+  original-author: Jake Schincariol
 ---
 
 # ig-plan

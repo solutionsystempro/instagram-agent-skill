@@ -6,6 +6,10 @@ description: >-
   when the user pastes comments from their Instagram post or asks how to
   answer a critic, hater or lead in their Instagram comments. Drafts only.
   Nothing is posted without the user's approval.
+license: MIT
+metadata:
+  maintainer: Ian Ryan Kirk
+  original-author: Jake Schincariol
 ---
 
 # ig-reply

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Original (c) 2026 Jake Schincariol. Modifications (c) 2026 Ian Ryan Kirk. MIT License.
 """
 caption.py - lint an Instagram caption and show exactly what the feed shows
 before the "... more".

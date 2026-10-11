@@ -1,3 +1,4 @@
+# Copyright (c) 2026 Ian Ryan Kirk. MIT License.
 """Consistency checks: manifests parse, versions agree, and the README
 lists exactly the skills that exist."""
 

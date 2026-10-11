@@ -1,3 +1,4 @@
+# Copyright (c) 2026 Ian Ryan Kirk. MIT License.
 """Shared helpers. Each tool lives in its own skill folder and is not a
 package, so tests load it by path, the same way a copied skill folder runs."""
 

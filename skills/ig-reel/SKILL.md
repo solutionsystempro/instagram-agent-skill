@@ -6,6 +6,10 @@ description: >-
   sheet from beats.py, in the user's own voice. Use when the user wants an
   Instagram Reel, a Reel script or a Reel hook, or is about to record a Reel
   without a first line.
+license: MIT
+metadata:
+  maintainer: Ian Ryan Kirk
+  original-author: Jake Schincariol
 ---
 
 # ig-reel

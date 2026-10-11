@@ -5,6 +5,10 @@ description: >-
   sticker goes where, and the poll or question box that starts DMs. Use when
   the user asks for an Instagram Story sequence, Instagram Story sticker or
   poll ideas, or wants to sell on Instagram Stories without a feed post.
+license: MIT
+metadata:
+  maintainer: Ian Ryan Kirk
+  original-author: Jake Schincariol
 ---
 
 # ig-story

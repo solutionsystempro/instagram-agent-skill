@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Original (c) 2026 Jake Schincariol. Modifications (c) 2026 Ian Ryan Kirk. MIT License.
 """
 swipe.py - rank reels you collected by how far they beat their own account,
 name the hook formula each one used, and write the swipe file.

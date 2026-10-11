@@ -5,6 +5,10 @@ description: >-
   slide copy, and 1080x1350 slide files. Use when the user asks for an
   Instagram carousel or swipe post, or wants to turn an idea into Instagram
   carousel slides. Not for presentation decks.
+license: MIT
+metadata:
+  maintainer: Ian Ryan Kirk
+  original-author: Jake Schincariol
 ---
 
 # ig-carousel

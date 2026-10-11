@@ -5,6 +5,10 @@ description: >-
   engaged, a collab pitch, and two follow-ups. Use when the user needs to
   write an Instagram direct message to a specific person or brand. Drafts
   only. The user sends each one. Not for email or LinkedIn outreach.
+license: MIT
+metadata:
+  maintainer: Ian Ryan Kirk
+  original-author: Jake Schincariol
 ---
 
 # ig-dm

@@ -5,6 +5,10 @@ description: >-
   post or call transcript) into a week of Instagram Reels and carousels that
   each stand alone. Use when the user wants to repurpose long-form content for
   Instagram or cut a transcript into Instagram Reels.
+license: MIT
+metadata:
+  maintainer: Ian Ryan Kirk
+  original-author: Jake Schincariol
 ---
 
 # ig-repurpose

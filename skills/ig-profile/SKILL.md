@@ -5,6 +5,10 @@ description: >-
   what loses points: name field, bio, link, highlights, pinned posts, grid.
   Use when the user wants to optimize their Instagram profile or bio, score
   their Instagram, or asks why Instagram visitors do not follow.
+license: MIT
+metadata:
+  maintainer: Ian Ryan Kirk
+  original-author: Jake Schincariol
 ---
 
 # ig-profile

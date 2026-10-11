@@ -6,6 +6,10 @@ description: >-
   opinion. Use when the user pastes an Instagram post or reel and wants a
   comment, or wants a batch for their daily Instagram engagement round. Drafts
   only. The user posts every comment by hand.
+license: MIT
+metadata:
+  maintainer: Ian Ryan Kirk
+  original-author: Jake Schincariol
 ---
 
 # ig-comment

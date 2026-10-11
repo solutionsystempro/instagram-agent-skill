@@ -6,6 +6,10 @@ description: >-
   it with detect.py. Use when the user asks to humanize or de-slop Instagram
   copy, asks if an Instagram draft sounds like AI, or when another ig-* skill
   hands over a draft.
+license: MIT
+metadata:
+  maintainer: Ian Ryan Kirk
+  original-author: Jake Schincariol
 ---
 
 # ig-human
