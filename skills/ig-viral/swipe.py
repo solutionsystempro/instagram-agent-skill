@@ -45,7 +45,8 @@ except Exception:                                 # ig-viral copied on its own
 
 def load_formulas(path):
     try:
-        d = json.load(open(path, encoding="utf-8"))
+        with open(path, encoding="utf-8") as fh:
+            d = json.load(fh)
     except Exception:
         return None
     by_id = {h["id"]: h for h in d["hooks"]}
