@@ -18,11 +18,11 @@ def load(skill, module):
     return mod
 
 
-def run_cli(skill, script, *args, stdin=None):
+def run_cli(skill, script, *args, stdin=None, cwd=None):
     """Run a tool the way a user does, through pipes. -I ignores
     PYTHONIOENCODING and PYTHONUTF8, so a Windows cp1252 default would show
     up here as a crash."""
     return subprocess.run(
         [sys.executable, "-I", os.path.join(SKILLS, skill, script), *args],
         input=stdin.encode("utf-8") if stdin is not None else None,
-        capture_output=True, timeout=60)
+        capture_output=True, timeout=60, cwd=cwd)

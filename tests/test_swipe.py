@@ -53,10 +53,9 @@ class SwipeTest(unittest.TestCase):
 
     def test_cli_writes_markdown_to_a_bare_filename(self):
         with tempfile.TemporaryDirectory() as tmp:
-            out = os.path.join(tmp, "swipe.md")
-            p = run_cli("ig-viral", "swipe.py", self.path, "--out", out)
+            p = run_cli("ig-viral", "swipe.py", self.path, "--out", "swipe.md", cwd=tmp)
             self.assertEqual(p.returncode, 0, p.stderr.decode("utf-8", "replace"))
-            with open(out, encoding="utf-8") as fh:
+            with open(os.path.join(tmp, "swipe.md"), encoding="utf-8") as fh:
                 self.assertIn("# Swipe file", fh.read())
             self.assertIn("\U0001F525", p.stdout.decode("utf-8"))
 

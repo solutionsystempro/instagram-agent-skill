@@ -1,5 +1,10 @@
 # The Instagram agent skill
 
+Based on the original by Jake Schincariol:
+[Jakeschincariol/instagram-agent-skill](https://github.com/Jakeschincariol/instagram-agent-skill).
+This is version 1.1.0, with bug fixes, tests and tighter platform rules on top.
+See [What changed from the original](#what-changed-from-the-original).
+
 Thirteen Claude skills that run an Instagram account. Free, MIT, no signup, no
 API key, nothing to connect.
 
@@ -34,6 +39,18 @@ git clone https://github.com/Jakeschincariol/instagram-agent-skill.git
 cp -r instagram-agent-skill/skills/ig-* ~/.claude/skills/
 ```
 
+On Windows, in PowerShell:
+
+```powershell
+git clone https://github.com/Jakeschincariol/instagram-agent-skill.git
+New-Item -ItemType Directory -Force "$HOME\.claude\skills" | Out-Null
+Copy-Item -Recurse -Force instagram-agent-skill\skills\ig-* "$HOME\.claude\skills\"
+```
+
+Copy all thirteen folders together. `/ig-viral` reads `ig-reel/hooks.json` and
+`ig-reel/hookscore.py` from the sibling folder, and falls back to unscored,
+unnamed rows if `ig-reel` is missing.
+
 Or as a plugin:
 
 ```
@@ -43,7 +60,7 @@ Or as a plugin:
 
 Project-local instead of global: copy the same folders into your repo's
 `.claude/skills/`. No Claude Code at all? Paste any single `SKILL.md` at the top
-of a chat and it runs as a mode. You lose the five Python tools, which is most
+of a chat and it runs as a mode. You lose the six Python tools, which is most
 of the point of `/ig-reel` and `/ig-human`, but the rest works.
 
 Then spend ten minutes on `templates/voice.md`. Copy it to
@@ -70,16 +87,18 @@ out loud.
 | `/ig-repurpose` | One video, podcast or newsletter into a week of reels and carousels that each stand alone. |
 | `/ig-audit` | Post-mortem on what you already posted. Ranks by outlier multiple and sends per reach, not views. |
 
-## The five tools that actually run
+## The six tools that actually run
 
 No dependencies, no network, nothing uploaded. They run on your machine, on
-your text.
+your text. Standard library only, tested on Python 3.12. The examples use
+`python`; on macOS or Linux that may be `python3`. Each command runs from the
+tool's own folder, and inside Claude Code the skills call them by full path.
 
 ### Hooks
 
 ```bash
-python3 hookscore.py hooks.txt              # rank your options
-python3 beats.py script.txt --target 30     # time it before you shoot it
+python hookscore.py hooks.txt              # rank your options
+python beats.py script.txt --target 30     # time it before you shoot it
 ```
 
 ```
@@ -124,7 +143,7 @@ BEAT SHEET  ·  73 words  ·  ~26.6s at 165 wpm  ·  target 30.0s
 ### The caption
 
 ```bash
-python3 caption.py caption.txt --keywords "client contracts,freelance pricing"
+python caption.py caption.txt --keywords "client contracts,freelance pricing"
 ```
 
 Instagram gives a caption about 125 characters in the feed and hides the rest
@@ -153,9 +172,9 @@ Instagram cut it on 18 December 2025.
 ### The humanizer
 
 ```bash
-python3 humanize.py draft.txt --report      # clean it, show every change
-python3 detect.py draft.txt                  # score it, five checks
-python3 detect.py before.txt after.txt       # prove the delta
+python humanize.py draft.txt --report      # clean it, show every change
+python detect.py draft.txt                  # score it, five checks
+python detect.py before.txt after.txt       # prove the delta
 ```
 
 **What comes out automatically:**
@@ -199,7 +218,7 @@ After `humanize.py`, with the flagged structures still unrewritten:
 ### The swipe file
 
 ```bash
-python3 swipe.py captured.tsv --out ~/.claude/instagram/swipe.md
+python swipe.py captured.tsv --out ~/.claude/instagram/swipe.md
 ```
 
 Raw views are not evidence. A 2,000,000-follower account doing 400,000 views
@@ -220,6 +239,9 @@ SWIPE FILE  ·  4 reels  ·  4 accounts  ·  baseline: account median
 ```
 
 ## What I actually measured, which is the part worth reading
+
+*This section is Jake Schincariol's measurement from the original 1.0 release,
+kept in his words. It was not re-run for 1.1.0.*
 
 I did not want to publish a hook scorer on the claim that it feels right, so I
 tested it. The corpus is **74 real short-form hooks**: the first three seconds
@@ -267,6 +289,11 @@ would rather know. The measurement script is not in the repo because it depends
 on `yt-dlp`, but the method is four lines and is written out in
 [`/ig-viral`](skills/ig-viral/SKILL.md).
 
+*1.1.0 note: `/ig-viral` now points at the official YouTube Data API for view
+counts instead of yt-dlp, because YouTube's Terms restrict automated
+downloading. The method, the first three seconds of the transcript, is the
+same.*
+
 ## The fine print, which is the honest part
 
 **These skills do not post to Instagram.** There is a real Content Publishing
@@ -283,9 +310,11 @@ The one exception is keyword auto-replies in DMs, which Instagram supports
 through its own tools and approved partners, and which only fire after somebody
 comments first. `/ig-dm` says where that line is.
 
-**`/ig-viral` reads, it does not scrape.** Ten accounts, a dozen reels each, at
-human speed, with you driving your own browser. It never asks for your password
-and never logs in as you. Automated collection at volume is the thing that gets
+**`/ig-viral` reads, it does not scrape.** Ten accounts, a dozen reels each.
+It works from what you paste first, the official Instagram Graph API second if
+you already have it set up, and a browser last, only at your request, at human
+speed, with you driving your own. It never asks for your password or token and
+never logs in as you. Automated collection at volume is the thing that gets
 accounts restricted, and a crawler is not what this is.
 
 **The five detection checks are local heuristics, not detector APIs.** They are
@@ -324,15 +353,40 @@ skills/ig-human/detect.py          the five-check panel
 skills/ig-viral/swipe.py           outlier ranking and formula classification
 skills/ig-profile/rubric.json      the 100-point profile score
 templates/voice.md                 your voice profile. Fill this in first.
+tests/                             stdlib unittest suite for the six tools
+CHANGELOG.md                       what changed in each version
 ```
+
+## Tests
+
+From the repo root, on any OS:
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+No dependencies. The suite runs each tool's core path plus the edge cases
+fixed in 1.1.0, including piping emoji through a Windows console.
+
+## What changed from the original
+
+Version 1.1.0 fixes bugs found by running the tools on Windows and on edge
+cases, adds the test suite, narrows each skill's trigger description to
+Instagram so they do not fire in unrelated sessions, makes tool paths work
+when installed as a plugin, and moves `/ig-viral` to official data sources
+first. The full list, including what was left alone, is in
+[CHANGELOG.md](CHANGELOG.md).
 
 ## Credit
 
-Made by Jake Schincariol, [opusjake.ai](https://opusjake.ai).
+Based on the original by Jake Schincariol,
+[instagram-agent-skill](https://github.com/Jakeschincariol/instagram-agent-skill)
+([opusjake.ai](https://opusjake.ai)). The skills, lexicon, hook formulas,
+rubric and measurement are his. Version 1.1.0 modifications by Ian Ryan Kirk.
 
-Sibling repo, same idea for a different platform:
+Jake's sibling repo, same idea for a different platform:
 [linkedin-agent-skill](https://github.com/Jakeschincariol/linkedin-agent-skill).
 
 ## License
 
-MIT. Take it, change it, ship it.
+MIT, see [LICENSE](LICENSE). Take it, change it, ship it.
