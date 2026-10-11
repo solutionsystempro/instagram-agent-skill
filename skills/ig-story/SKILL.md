@@ -71,10 +71,11 @@ The sequence that works: a story that names a problem, a question box or a poll
 that lets people say "that's me", and then a reply to each person who answered.
 The conversation starts because they spoke first.
 
-Automated keyword DM replies are a real, supported feature for professional
-accounts, through Instagram's own tools and approved partners. Bulk DMing
-people who did not interact is not, and it is what gets accounts restricted.
-The rule is simple: **they act first, then you reply.**
+Every reply is drafted here and sent by the user, one at a time. This skill
+does not recommend or set up keyword auto-DMs; if the user already runs Meta's
+own automation, that is their configuration, outside this pack. Bulk DMing
+people who did not interact is what gets accounts restricted. The rule is
+simple: **they act first, then you reply.**
 
 ## Output
 

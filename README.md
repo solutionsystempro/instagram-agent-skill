@@ -306,9 +306,10 @@ accounts action-blocked. So every skill here ends the same way: a copy-ready
 block, and you post it. That is not a limitation bolted on afterwards, it is
 the design, and it is why the approval gate is real rather than a setting.
 
-The one exception is keyword auto-replies in DMs, which Instagram supports
-through its own tools and approved partners, and which only fire after somebody
-comments first. `/ig-dm` says where that line is.
+That includes DMs. No skill here recommends or sets up keyword auto-replies
+or auto-DMs. If you already run Meta's own automation, that is your
+configuration, outside this pack, and these skills only draft the copy for you
+to review. Every message is approved by a human, one at a time.
 
 **`/ig-viral` reads, it does not scrape.** Ten accounts, a dozen reels each.
 It works from what you paste first, the official Instagram Graph API second if

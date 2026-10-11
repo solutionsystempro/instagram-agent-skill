@@ -35,11 +35,16 @@ here.
   crashed.
 - **`beats.py`** could print "0:60.0" as a timecode, and `--wpm 0` divided by
   zero.
+- **`swipe.py` mislabelled mixed baselines.** One row with an account median
+  made the whole report say "baseline: account median", even for rows that
+  fell back to follower count. Each row now records and shows the baseline it
+  used (`med` or `fol`), and the header says "account median", "follower
+  count", or "mixed" with the count of each.
 - CRLF input normalised in `humanize.py` and `caption.py` for library callers.
 
 ### Added
 
-- `tests/`: a standard-library `unittest` suite, 44 tests. They cover each
+- `tests/`: a standard-library `unittest` suite, 47 tests. They cover each
   tool's main path and the edge cases above, plus repo checks: manifests
   parse, versions agree, and the README lists exactly the skills that exist.
   Run it with `python -m unittest discover -s tests -v`.
@@ -62,6 +67,11 @@ here.
   instead. `/ig-audit` names Insights, Meta Business Suite exports and the
   Graph API as sources. `/ig-dm` and `/ig-reply` state that the skill never
   sends a DM or posts a reply itself.
+- **No keyword auto-DMs.** `/ig-reply`, `/ig-dm`, `/ig-story` and the README
+  said keyword auto-replies set up in Meta's tools could run without review.
+  They no longer recommend or set up auto-replies or auto-DMs. If the user
+  already runs Meta's own automation, that is their configuration, outside
+  this pack, which only drafts copy a human reviews and sends one at a time.
 - README: credit to the original, a note that the measurement section is
   Jake's from 1.0 and was not re-run, the tool count corrected from five to
   six, a Tests section, and this list.

@@ -16,7 +16,9 @@ with a header line naming the columns:
     @someone  48000       11000    412000   nobody tells you your first 30 flop
 
 `median` is that account's typical recent views and is the better baseline.
-If you only have `followers`, leave median out and the script says so.
+If you only have `followers`, leave median out and the script says so. Each
+row is labelled with the baseline it used, and a batch that mixes the two
+says how many of each, since the multiples are not on the same scale.
 `hook` is the first line of the reel, spoken or on screen, in their words.
 
 Usage
@@ -105,10 +107,14 @@ def read_rows(path):
 
 
 def analyse(rows, formulas):
-    used_median = any(r.get("median") for r in rows)
     for r in rows:
-        base = r.get("median") or r.get("followers") or 0
-        r["baseline"] = base
+        if r.get("median"):
+            base, source = r["median"], "median"
+        elif r.get("followers"):
+            base, source = r["followers"], "followers"
+        else:
+            base, source = 0, None
+        r["baseline"], r["baseline_source"] = base, source
         r["outlier"] = round(r["views"] / base, 2) if base else None
         r["formula_id"], r["formula"] = classify(r["hook"], formulas)
         r["words"] = len(WORD_RE.findall(r["hook"]))
@@ -128,8 +134,21 @@ def analyse(rows, formulas):
     counts = {}
     for r in top:
         counts[r["formula"]] = counts.get(r["formula"], 0) + 1
+    by_median = sum(1 for r in ranked if r["baseline_source"] == "median")
+    by_followers = sum(1 for r in ranked if r["baseline_source"] == "followers")
+    if by_median and not by_followers:
+        baseline = "account median"
+    elif by_followers and not by_median:
+        baseline = "follower count"
+    elif by_median and by_followers:              # multiples are not comparable
+        baseline = (f"mixed ({by_median} account median, "
+                    f"{by_followers} follower count)")
+    else:
+        baseline = "none"
     return {
-        "baseline": "account median" if used_median else "follower count",
+        "baseline": baseline,
+        "baseline_counts": {"median": by_median, "followers": by_followers,
+                            "none": len(ranked) - by_median - by_followers},
         "n": len(ranked),
         "accounts": len({r.get("account", "") for r in ranked}),
         "reels": ranked,
@@ -151,10 +170,12 @@ def render(a, out=sys.stdout):
         mult = f"{r['outlier']:.1f}x" if r["outlier"] else "   ?"
         score = f"{r['hook_score']:.0f}" if r["hook_score"] is not None else " -"
         fid = f"#{r['formula_id']:<2}" if r["formula_id"] else "-  "
-        print(f"  {mult:>7}  hook {score:>3}  {fid} {r['formula'][:22]:<22} "
+        src = {"median": "med", "followers": "fol"}.get(r["baseline_source"], " - ")
+        print(f"  {mult:>7} {src}  hook {score:>3}  {fid} {r['formula'][:22]:<22} "
               f"{r.get('account', '')[:16]:<16} {r['views']:>9,}", file=out)
         print(f"           \"{r['hook'][:96]}\"", file=out)
     print("-" * max(len(head), 78), file=out)
+    print("  med = multiple over account median, fol = over follower count.", file=out)
     print("WHAT IS WORKING IN THIS BATCH", file=out)
     if a["top_formulas"]:
         print("  top third by outlier:  "
@@ -171,6 +192,9 @@ def render(a, out=sys.stdout):
           "you believe it.\n", file=out)
 
 
+SOURCE_LABEL = {"median": "account median", "followers": "follower count"}
+
+
 def to_markdown(a):
     lines = ["# Swipe file", "",
              f"{a['n']} reels across {a['accounts']} accounts. "
@@ -178,7 +202,8 @@ def to_markdown(a):
     for r in a["reels"]:
         mult = f"{r['outlier']:.1f}x" if r["outlier"] else "?"
         lines += [f"## {mult}  {r['formula']}  ({r.get('account', '')})",
-                  f"- views: {r['views']:,}  baseline: {r['baseline']:,}",
+                  f"- views: {r['views']:,}  baseline: {r['baseline']:,} "
+                  f"({SOURCE_LABEL.get(r['baseline_source'], 'none')})",
                   f"- hook score: {r['hook_score']}  words: {r['words']}",
                   f"- hook: \"{r['hook']}\"", ""]
     return "\n".join(lines) + "\n"

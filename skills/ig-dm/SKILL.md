@@ -63,10 +63,11 @@ delivers a "before I send it, can I ask what you do?" is a bait and switch and
 it is remembered. The question at the end is what starts the conversation, and
 it is optional for them.
 
-Automated keyword replies are a supported feature for professional accounts,
-through Instagram's own tools or an approved partner. Using that is fine.
-Sending unsolicited bulk DMs is not, and it is the fastest route to a
-restricted account.
+This skill drafts the delivery; the user reads it and sends it. It does not
+recommend or set up keyword auto-DMs. If the user already runs Meta's own
+automation, that is their configuration, outside this pack, and this skill
+only drafts the copy for a human to review. Sending unsolicited bulk DMs is the
+fastest route to a restricted account.
 
 ## The first message to someone warm
 
@@ -115,5 +116,5 @@ Then stop. A third converts nobody and costs the relationship.
 ## Output
 
 The message, the character count, and the two follow-ups with the day each
-goes out, all run through `/ig-human`. The user sends every one of them by
-hand, or through their own approved automation for keyword replies only.
+goes out, all run through `/ig-human`. The user reviews and sends every one
+of them by hand.

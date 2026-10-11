@@ -51,6 +51,45 @@ class SwipeTest(unittest.TestCase):
         finally:
             os.remove(path)
 
+    def _analyse(self, tsv):
+        fd, path = tempfile.mkstemp(suffix=".tsv")
+        with os.fdopen(fd, "w", encoding="utf-8") as fh:
+            fh.write(tsv)
+        try:
+            return swipe.analyse(swipe.read_rows(path), None)
+        finally:
+            os.remove(path)
+
+    def test_baseline_all_median(self):
+        a = self._analyse("account\tfollowers\tmedian\tviews\thook\n"
+                          "@a\t48000\t11000\t412000\tone\n"
+                          "@b\t4000\t3000\t180000\ttwo\n")
+        self.assertEqual(a["baseline"], "account median")
+        self.assertEqual({r["baseline_source"] for r in a["reels"]}, {"median"})
+
+    def test_baseline_all_followers(self):
+        a = self._analyse("account\tfollowers\tviews\thook\n"
+                          "@a\t48000\t412000\tone\n"
+                          "@b\t4000\t180000\ttwo\n")
+        self.assertEqual(a["baseline"], "follower count")
+        self.assertEqual({r["baseline_source"] for r in a["reels"]}, {"followers"})
+
+    def test_baseline_mixed_is_labelled_per_row(self):
+        a = self._analyse("account\tfollowers\tmedian\tviews\thook\n"
+                          "@a\t48000\t11000\t412000\tone\n"
+                          "@b\t4000\t\t180000\ttwo\n"
+                          "@c\t9000\t\t90000\tthree\n")
+        self.assertEqual(a["baseline"], "mixed (1 account median, 2 follower count)")
+        by = {r["account"]: r for r in a["reels"]}
+        self.assertEqual(by["@a"]["baseline_source"], "median")
+        self.assertEqual(by["@a"]["baseline"], 11000)
+        self.assertEqual(by["@b"]["baseline_source"], "followers")
+        self.assertEqual(by["@b"]["outlier"], 45.0)
+        md = swipe.to_markdown(a)
+        self.assertIn("Ranked by multiple over mixed (1 account median, 2 follower count)", md)
+        self.assertIn("baseline: 4,000 (follower count)", md)
+        self.assertIn("baseline: 11,000 (account median)", md)
+
     def test_cli_writes_markdown_to_a_bare_filename(self):
         with tempfile.TemporaryDirectory() as tmp:
             p = run_cli("ig-viral", "swipe.py", self.path, "--out", "swipe.md", cwd=tmp)

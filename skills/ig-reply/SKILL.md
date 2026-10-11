@@ -29,7 +29,7 @@ Sort every comment into one of six buckets and say the counts out loud:
 
 | bucket | what it is | what it gets |
 | --- | --- | --- |
-| **KEYWORD** | the word you asked them to comment | the promised thing, sent by hand or by your approved tool |
+| **KEYWORD** | the word you asked them to comment | the promised thing, reviewed and sent by hand |
 | **LEAD** | someone describing the problem you solve | a real answer in public, then a door |
 | **SUBSTANCE** | adds data, disagrees, extends | the longest reply on the thread |
 | **QUESTION** | a question a lot of people have | this one becomes a Reel, not just a reply |
@@ -66,10 +66,11 @@ every QUESTION that qualifies and hand it to `/ig-reel` as formula #16.
 
 If the post used a keyword ask, those comments are the whole point of the post.
 Every one of them is a person who raised their hand. Draft a reply to each and
-the message that delivers what was promised. If the user has keyword automation
-set up through Instagram's own tools or an approved partner, that is their
-configuration and it can run; if not, the user sends the replies by hand, and
-that is fine at this volume. This skill never posts a reply or sends a DM
+the message that delivers what was promised. The user reads each one and sends
+it by hand, and that is fine at this volume. This skill does not recommend or
+set up keyword auto-replies or auto-DMs. If the user already runs Meta's own
+automation, that is their configuration, outside this pack, and this skill
+only drafts copy for a human to review. It never posts a reply or sends a DM
 itself, by browser or by API. Never bulk-DM people who did not comment.
 
 ## Output
