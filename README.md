@@ -27,7 +27,7 @@ see it.
 Paste this into Claude:
 
 ```
-https://github.com/Jakeschincariol/instagram-agent-skill
+https://github.com/solutionsystempro/instagram-agent-skill
 
 Install this skill, then confirm /ig-reel works.
 ```
@@ -35,14 +35,14 @@ Install this skill, then confirm /ig-reel works.
 Or do it yourself, in Claude Code:
 
 ```bash
-git clone https://github.com/Jakeschincariol/instagram-agent-skill.git
+git clone https://github.com/solutionsystempro/instagram-agent-skill.git
 cp -r instagram-agent-skill/skills/ig-* ~/.claude/skills/
 ```
 
 On Windows, in PowerShell:
 
 ```powershell
-git clone https://github.com/Jakeschincariol/instagram-agent-skill.git
+git clone https://github.com/solutionsystempro/instagram-agent-skill.git
 New-Item -ItemType Directory -Force "$HOME\.claude\skills" | Out-Null
 Copy-Item -Recurse -Force instagram-agent-skill\skills\ig-* "$HOME\.claude\skills\"
 ```
@@ -54,7 +54,7 @@ unnamed rows if `ig-reel` is missing.
 Or as a plugin:
 
 ```
-/plugin marketplace add Jakeschincariol/instagram-agent-skill
+/plugin marketplace add solutionsystempro/instagram-agent-skill
 /plugin install instagram-agent
 ```
 

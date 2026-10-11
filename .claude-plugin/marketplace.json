@@ -3,8 +3,8 @@
   "name": "instagram-agent-skill",
   "description": "The Instagram agent skill pack for Claude",
   "owner": {
-    "name": "Jake Schincariol",
-    "url": "https://opusjake.ai"
+    "name": "Ian Ryan Kirk",
+    "url": "https://github.com/solutionsystempro"
   },
   "plugins": [
     {
@@ -13,7 +13,7 @@
       "source": "./",
       "version": "1.1.0",
       "category": "productivity",
-      "homepage": "https://github.com/Jakeschincariol/instagram-agent-skill"
+      "homepage": "https://github.com/solutionsystempro/instagram-agent-skill"
     }
   ]
 }
