@@ -275,10 +275,17 @@ def main():
     ap.add_argument("--json", action="store_true")
     args = ap.parse_args()
 
+    for stream in (sys.stdin, sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):   # Windows pipes default to cp1252
+            stream.reconfigure(encoding="utf-8", errors="replace")
     if args.hook:
         lines = [args.hook]
+    elif args.input == "-":
+        raw = sys.stdin.read()
+        lines = [l.strip() for l in raw.splitlines() if l.strip()]
     else:
-        raw = sys.stdin.read() if args.input == "-" else open(args.input, encoding="utf-8").read()
+        with open(args.input, encoding="utf-8-sig") as fh:
+            raw = fh.read()
         lines = [l.strip() for l in raw.splitlines() if l.strip()]
     if not lines:
         print("nothing to score", file=sys.stderr)

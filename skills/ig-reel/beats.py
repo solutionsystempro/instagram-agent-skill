@@ -53,7 +53,8 @@ def pretty(token):
 
 
 def tc(seconds):
-    m, s = divmod(seconds, 60)
+    # Round first, or 59.96s prints as "0:60.0" instead of "1:00.0".
+    m, s = divmod(round(seconds, 1), 60)
     return f"{int(m)}:{s:04.1f}"
 
 
@@ -198,8 +199,17 @@ def main():
     ap.add_argument("--target", type=float, help="target length in seconds")
     ap.add_argument("--json", action="store_true")
     args = ap.parse_args()
+    if args.wpm <= 0:
+        ap.error("--wpm must be above 0")
 
-    raw = sys.stdin.read() if args.input == "-" else open(args.input, encoding="utf-8").read()
+    for stream in (sys.stdin, sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):   # Windows pipes default to cp1252
+            stream.reconfigure(encoding="utf-8", errors="replace")
+    if args.input == "-":
+        raw = sys.stdin.read()
+    else:
+        with open(args.input, encoding="utf-8-sig") as fh:
+            raw = fh.read()
     a = analyse(raw, wpm=args.wpm, target=args.target)
     if not a:
         print("empty script", file=sys.stderr)

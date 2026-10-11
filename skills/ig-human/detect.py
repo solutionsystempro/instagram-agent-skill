@@ -198,8 +198,17 @@ def main():
     ap.add_argument("--lexicon", default=LEX)
     args = ap.parse_args()
 
-    lex = json.load(open(args.lexicon, encoding="utf-8"))
-    read = lambda p: sys.stdin.read() if p == "-" else open(p, encoding="utf-8").read()
+    for stream in (sys.stdin, sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):   # Windows pipes default to cp1252
+            stream.reconfigure(encoding="utf-8", errors="replace")
+    with open(args.lexicon, encoding="utf-8") as fh:
+        lex = json.load(fh)
+
+    def read(p):
+        if p == "-":
+            return sys.stdin.read()
+        with open(p, encoding="utf-8-sig") as fh:
+            return fh.read()
 
     targets = [(args.input, read(args.input))]
     if args.compare:

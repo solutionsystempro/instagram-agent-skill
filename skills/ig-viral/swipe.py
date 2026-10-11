@@ -63,8 +63,24 @@ def classify(hook, formulas):
     return None, "unclassified"
 
 
+def parse_count(cell):
+    """'412000', '412,000', '412K', '1.2M' -> int. Instagram shows the short
+    forms, and stripping the non-digits from '1.2M' used to leave 12."""
+    s = (cell or "").strip().replace(",", "").replace(" ", "").lower()
+    m = re.fullmatch(r"(\d+(?:\.\d+)?)([kmb]?)", s)
+    if not m:
+        digits = re.sub(r"[^\d]", "", s)
+        return int(digits) if digits else None
+    mult = {"": 1, "k": 1_000, "m": 1_000_000, "b": 1_000_000_000}[m.group(2)]
+    return int(round(float(m.group(1)) * mult))
+
+
 def read_rows(path):
-    raw = sys.stdin.read() if path == "-" else open(path, encoding="utf-8").read()
+    if path == "-":
+        raw = sys.stdin.read()
+    else:
+        with open(path, encoding="utf-8-sig") as fh:    # Excel adds a BOM
+            raw = fh.read()
     lines = [l for l in raw.splitlines() if l.strip() and not l.lstrip().startswith("#")]
     if not lines:
         return []
@@ -79,13 +95,9 @@ def read_rows(path):
         if len(cells) < len(cols):
             cells += [""] * (len(cols) - len(cells))
         r = dict(zip(cols, [c.strip() for c in cells]))
-        try:
-            r["views"] = int(re.sub(r"[^\d]", "", r.get("views", "")) or 0)
-        except ValueError:
-            continue
+        r["views"] = parse_count(r.get("views")) or 0
         for k in ("followers", "median"):
-            digits = re.sub(r"[^\d]", "", r.get(k, "") or "")
-            r[k] = int(digits) if digits else None
+            r[k] = parse_count(r.get(k))
         if r["views"] and r.get("hook"):
             rows.append(r)
     return rows
@@ -179,6 +191,9 @@ def main():
     ap.add_argument("--json", action="store_true")
     args = ap.parse_args()
 
+    for stream in (sys.stdin, sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):   # Windows pipes default to cp1252
+            stream.reconfigure(encoding="utf-8", errors="replace")
     rows = read_rows(args.input)
     if not rows:
         print("no usable rows. Need a tab-separated file with at least views and hook.",
@@ -197,8 +212,10 @@ def main():
         render(a)
     if args.out:
         path = os.path.expanduser(args.out)
-        os.makedirs(os.path.dirname(path), exist_ok=True)
-        open(path, "w", encoding="utf-8").write(to_markdown(a))
+        if os.path.dirname(path):                 # a bare "swipe.md" has no folder
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w", encoding="utf-8") as fh:
+            fh.write(to_markdown(a))
         print(f"wrote {path}", file=sys.stderr)
 
 

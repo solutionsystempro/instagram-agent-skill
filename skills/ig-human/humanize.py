@@ -144,14 +144,16 @@ def pass_lexical(text, lex):
     # Clean up after deletions. Deleting a whole clause leaves orphaned
     # punctuation behind ("system. ." or a line that now opens on a comma),
     # and that reads worse than the slop did.
-    text = re.sub(r"[ \t]{2,}", " ", text)
+    # Protect real ellipses first, so a line that opens on one ("...and then he
+    # asked for a refund") is not mistaken for orphaned punctuation.
+    text = text.replace("...", "\x00ELL\x00")
+    text = re.sub(r"(?<=\S)[ \t]{2,}", " ", text)      # leading indents are left alone
     text = re.sub(r"(?m)^[ \t]*(?:[,.;:]+[ \t]*)+", "", text)
     text = re.sub(r"(?m)^[ \t](?=\S)", "", text)       # one space left by a deletion.
                                                       # Deeper indents are deliberate.
-    text = re.sub(r"\s+([,.;:!?])", r"\1", text)
+    text = re.sub(r"[ \t]+([,.;:!?])(?![()])", r"\1", text)   # not across lines, not ":)"
     text = re.sub(r",\s*([,.;:!?])", r"\1", text)      # an em dash became a comma,
                                                       # then the clause after it went
-    text = text.replace("...", "\x00ELL\x00")          # protect real ellipses
     text = re.sub(r"\.\s*\.+", ".", text)
     text = re.sub(r"([!?])\s*\.", r"\1", text)
     text = text.replace("\x00ELL\x00", "...")
@@ -199,11 +201,28 @@ def restore_capitals(original, text):
     starts = re.findall(r"(?:^|[.!?]\s+|\n)\s*([A-Za-z])", original)
     if not starts or sum(1 for c in starts if c.isupper()) * 2 < len(starts):
         return text
-    return re.sub(r"(?:^|(?<=[.!?] )|(?<=[.!?]\n)|(?<=\n))\s*([a-z])",
-                  lambda m: m.group(0)[:-1] + m.group(1).upper(), text)
+    # A lower-case start the writer already had is theirs, not an artefact:
+    # "e.g. the template", or a line that opens on "iPhone". Only words that
+    # were not already sitting lower case at a sentence start get raised.
+    start_re = re.compile(r"(?:^|(?<=[.!?] )|(?<=[.!?]\n)|(?<=\n))(\s*)([a-z][\w'-]*)")
+    kept = {}
+    for _, word in start_re.findall(original):
+        kept[word] = kept.get(word, 0) + 1
+
+    def fix(m):
+        space, word = m.group(1), m.group(2)
+        if kept.get(word):
+            kept[word] -= 1
+            return m.group(0)
+        if any(c.isupper() for c in word[1:]):     # iPhone, eBay: a brand, not a slip
+            return m.group(0)
+        return space + word[0].upper() + word[1:]
+
+    return start_re.sub(fix, text)
 
 
 def humanize(text, lex):
+    text = text.replace("\r\n", "\n")
     raw_for_case = text
     text, urls = protect_urls(text)
     text, inv = pass_invisible(text, lex)
@@ -262,7 +281,14 @@ def main():
     ap.add_argument("--lexicon", default=LEX, help="path to slop.json")
     args = ap.parse_args()
 
-    raw = sys.stdin.read() if args.input == "-" else open(args.input, encoding="utf-8").read()
+    for stream in (sys.stdin, sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):   # Windows pipes default to cp1252
+            stream.reconfigure(encoding="utf-8", errors="replace")
+    if args.input == "-":
+        raw = sys.stdin.read()
+    else:
+        with open(args.input, encoding="utf-8") as fh:   # a BOM is stripped by pass 1
+            raw = fh.read()
     lex = load_lexicon(args.lexicon)
     clean, report = humanize(raw, lex)
 

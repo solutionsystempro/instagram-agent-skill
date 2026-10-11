@@ -35,11 +35,13 @@ HASHTAG_LIMIT = 5        # Instagram's cap per post or reel since 18 Dec 2025,
                          # rather than many generic ones, can improve both your
                          # content's performance and people's experience".
 
-HASHTAG_RE = re.compile(r"(?:^|\s)(#[A-Za-z0-9_]+)")
+HASHTAG_RE = re.compile(r"(?:^|\s)(#\w+)")    # \w is Unicode-aware, so #café counts
 MENTION_RE = re.compile(r"(?:^|\s)(@[A-Za-z0-9_.]+)")
 LINK_RE = re.compile(r"https?://\S+|\bwww\.\S+|\b[a-z0-9-]+\.(?:com|co|io|net|org|ai|app)/\S*",
                      re.IGNORECASE)
-EMOJI_RE = re.compile(r"[\U0001F300-\U0001FAFF☀-➿←-⇿️]")
+# Skin-tone modifiers (U+1F3FB-1F3FF) and the U+FE0F variation selector are
+# parts of one emoji, not emoji of their own, so they are left out of the class.
+EMOJI_RE = re.compile("[\U0001F300-\U0001F3FA\U0001F400-\U0001FAFF\u2600-\u27BF\u2190-\u21FF]")
 CONCRETE_RE = re.compile(r"\$\s?\d|\b\d[\d,.]*\b|(?<!^)\b[A-Z][a-z]{2,}\b", re.MULTILINE)
 
 ASKS = [
@@ -77,9 +79,13 @@ def render_box(window, truncated, out=sys.stdout, width=52):
 
 
 def analyse(text, cut=TRUNCATE, keywords=None):
-    text = text.rstrip()
+    text = text.replace("\r\n", "\n").replace("\r", "\n").rstrip()
     stripped = text.strip()
     chars = len(stripped)
+    # Python counts code points. Some counters count UTF-16 units, where most
+    # emoji take two. When the two disagree at the limit, say so rather than
+    # guess which one Instagram uses.
+    utf16 = len(stripped.encode("utf-16-le")) // 2
     lines = [l for l in stripped.split("\n")]
     first_line = lines[0].strip() if lines else ""
     tags = HASHTAG_RE.findall(stripped)
@@ -97,11 +103,17 @@ def analyse(text, cut=TRUNCATE, keywords=None):
     def add(name, status, detail):
         checks.append({"check": name, "status": status, "detail": detail})
 
-    add("LENGTH", "FAIL" if chars > LIMIT else "PASS",
-        f"{chars} / {LIMIT} characters" + (f", {chars - LIMIT} over the limit"
-                                           if chars > LIMIT else ""))
+    if chars > LIMIT:
+        add("LENGTH", "FAIL", f"{chars} / {LIMIT} characters, {chars - LIMIT} over the limit")
+    elif utf16 > LIMIT:
+        add("LENGTH", "WARN", f"{chars} / {LIMIT} characters, but {utf16} if each emoji "
+                              "counts as two. Trim it so it fits either way")
+    else:
+        add("LENGTH", "PASS", f"{chars} / {LIMIT} characters")
 
-    if not first_line:
+    if not stripped:
+        add("FIRST LINE", "FAIL", "the caption is empty")
+    elif not first_line:
         add("FIRST LINE", "FAIL", "the caption opens on a blank line")
     elif first_line.startswith("#") or first_line.startswith("@"):
         add("FIRST LINE", "FAIL",
@@ -201,7 +213,14 @@ def main():
     ap.add_argument("--json", action="store_true")
     args = ap.parse_args()
 
-    raw = sys.stdin.read() if args.input == "-" else open(args.input, encoding="utf-8").read()
+    for stream in (sys.stdin, sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):   # Windows pipes default to cp1252
+            stream.reconfigure(encoding="utf-8", errors="replace")
+    if args.input == "-":
+        raw = sys.stdin.read()
+    else:
+        with open(args.input, encoding="utf-8-sig") as fh:
+            raw = fh.read()
     a = analyse(raw, cut=args.truncate, keywords=args.keywords.split(","))
     if args.json:
         print(json.dumps(a, indent=2, ensure_ascii=False))
