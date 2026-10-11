@@ -85,4 +85,3 @@ here.
   Instagram's limit has moved, change `HASHTAG_LIMIT` in `caption.py`.
 - The scoring weights, thresholds and lexicon. No new evidence was gathered,
   so there was no basis to retune them.
-- Plugin and marketplace URLs still point to the original repository.
